@@ -1,20 +1,17 @@
 package com.lovis.lovis.controllers.student;
 
 import com.lovis.lovis.entities.student.Student;
-import com.lovis.lovis.repositories.student.StudentRepository;
 import com.lovis.lovis.services.student.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-@RestController
 @RequiredArgsConstructor
+@RestController
 @RequestMapping(path="/school/v1/students/")
 public class StudentController {
     public final StudentService studentService;
-    private final StudentRepository studentRepository;
 
     @GetMapping("all")
     public List<Student> findAllStudents() {
@@ -31,9 +28,9 @@ public class StudentController {
         return studentService.findStudentByRegistrationNumber(registrationNumber);
     }
 
-    @PostMapping("register")
-    public ResponseEntity<String> registerStudent(@RequestBody Student student) {
-        return studentService.addStudent(student);
+    @PostMapping("register/{parentId}")
+    public ResponseEntity<String> registerStudent(@RequestBody Student student, @PathVariable int parentId) {
+        return studentService.addStudent(student, parentId);
     }
 
     @PutMapping("update/{studentId}")

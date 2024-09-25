@@ -1,5 +1,6 @@
 package com.lovis.lovis.entities.student;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lovis.lovis.entities.attendance.Attendance;
 import com.lovis.lovis.entities.course.Course;
 import com.lovis.lovis.entities.guardian.Parent;
@@ -33,6 +34,8 @@ public class Student {
     private String email;
     private Date dateOfBirth;
     private String gender;
+    private String address;
+    private String phoneNumber;
     @CreationTimestamp
     private Date dateOfEnrollment;
     @UpdateTimestamp
@@ -42,5 +45,7 @@ public class Student {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Attendance> attendance;
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private Parent parent;
 }

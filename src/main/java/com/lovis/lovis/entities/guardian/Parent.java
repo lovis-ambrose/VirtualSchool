@@ -1,5 +1,6 @@
 package com.lovis.lovis.entities.guardian;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lovis.lovis.entities.student.Student;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class Parent {
     private String email;
     private String phoneNumber;
     private String address;
-    @OneToMany
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Student> students;
 }
