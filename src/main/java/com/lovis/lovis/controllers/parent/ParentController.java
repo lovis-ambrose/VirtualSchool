@@ -3,6 +3,7 @@ package com.lovis.lovis.controllers.parent;
 import com.lovis.lovis.entities.guardian.Parent;
 import com.lovis.lovis.exceptions.response.NotFoundResponse;
 import com.lovis.lovis.services.parent.ParentService;
+import com.lovis.lovis.services.parent.dto.ParentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,10 @@ public class ParentController {
     }
 
     @PostMapping("addNew")
-    public ResponseEntity<String> addNewParent(@RequestBody Parent parent) {
-        return parentService.addParent(parent);
+    public ResponseEntity<String> addNewParent(@RequestBody ParentRequest parentRequest) {
+        return parentService.addParent(parentRequest);
     }
+
     @PutMapping("update/{parentId}")
     public ResponseEntity<String> updateParent(@RequestBody Parent parent, @PathVariable int parentId) throws NotFoundResponse {
         return parentService.updateParent(parent, parentId);

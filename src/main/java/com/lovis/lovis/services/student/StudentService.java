@@ -1,10 +1,9 @@
 package com.lovis.lovis.services.student;
 
-import com.lovis.lovis.entities.guardian.Parent;
 import com.lovis.lovis.entities.student.Student;
 import com.lovis.lovis.exceptions.response.ApiRequestResponse;
-import com.lovis.lovis.repositories.parent.ParentRepository;
 import com.lovis.lovis.repositories.student.StudentRepository;
+import com.lovis.lovis.services.student.dto.StudentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,11 +17,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final ParentRepository parentRepository;
 
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<StudentRequest> getAllStudents() {
+        List<Student> students = studentRepository.findAll();
+        // Transform the list of students into a list of StudentRequest DTOs
+        return students
+                .stream()
+                .map(StudentRequest::fromStudentDTO)
+                .toList();
     }
 
     public Student getStudentById(@RequestParam int studentId) {
@@ -41,26 +44,16 @@ public class StudentService {
         throw new ApiRequestResponse("No student found with registration number " + registrationNumber);
     }
 
-    public ResponseEntity<String> addStudent(@RequestBody Student student, @RequestParam int parentId) {
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
         // Check if the email already exists
         String email = student.getEmail();
         Optional<Student> emailExists = studentRepository.findByEmail(email);
         if (emailExists.isPresent()) {
             throw new ApiRequestResponse("Student with email " + email + " already exists");
         }
+        Student savedStudent = studentRepository.save(student);
 
-        // Fetch the parent from the database
-        Optional<Parent> parent = parentRepository.findById(parentId);
-        if (parent.isPresent()) {
-            student.setParent(parent.get());  // Associate the student with the parent
-        } else {
-            throw new ApiRequestResponse("Parent with ID " + parentId + " not found");
-        }
-
-        // Save the student
-        studentRepository.save(student);
-
-        return ResponseEntity.ok("Student saved successfully");
+        return ResponseEntity.ok(savedStudent);
     }
 
     public ResponseEntity<String> updateStudent(@RequestBody Student student, @RequestParam int studentId) {

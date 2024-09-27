@@ -46,6 +46,6 @@ public class Student {
     private List<Attendance> attendance;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_id")
-    @JsonIgnore
+//    @JsonIgnore
     private Parent parent;
 }

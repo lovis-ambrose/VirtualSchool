@@ -2,6 +2,7 @@ package com.lovis.lovis.controllers.student;
 
 import com.lovis.lovis.entities.student.Student;
 import com.lovis.lovis.services.student.StudentService;
+import com.lovis.lovis.services.student.dto.StudentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public class StudentController {
     public final StudentService studentService;
 
     @GetMapping("all")
-    public List<Student> findAllStudents() {
+    public List<StudentRequest> findAllStudents() {
         return studentService.getAllStudents();
     }
 
@@ -28,9 +29,9 @@ public class StudentController {
         return studentService.findStudentByRegistrationNumber(registrationNumber);
     }
 
-    @PostMapping("register/{parentId}")
-    public ResponseEntity<String> registerStudent(@RequestBody Student student, @PathVariable int parentId) {
-        return studentService.addStudent(student, parentId);
+    @PostMapping("register")
+    public ResponseEntity<Student> registerStudent(@RequestBody Student student) {
+        return studentService.addStudent(student);
     }
 
     @PutMapping("update/{studentId}")

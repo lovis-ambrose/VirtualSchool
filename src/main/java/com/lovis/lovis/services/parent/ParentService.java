@@ -1,9 +1,12 @@
 package com.lovis.lovis.services.parent;
 
 import com.lovis.lovis.entities.guardian.Parent;
+import com.lovis.lovis.entities.student.Student;
 import com.lovis.lovis.exceptions.response.ApiRequestResponse;
 import com.lovis.lovis.exceptions.response.NotFoundResponse;
 import com.lovis.lovis.repositories.parent.ParentRepository;
+import com.lovis.lovis.repositories.student.StudentRepository;
+import com.lovis.lovis.services.parent.dto.ParentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import java.util.Optional;
 public class ParentService {
 
     private final ParentRepository parentRepository;
+    private final StudentRepository studentRepository;
 
     public List<Parent> getAllParents() {
         return parentRepository.findAll();
@@ -33,15 +37,27 @@ public class ParentService {
         }
     }
 
-    public ResponseEntity<String> addParent(@RequestBody Parent parent) {
-        String email = parent.getEmail();
+    public ResponseEntity<String> addParent(@RequestBody ParentRequest parentRequest) {
+        String email = parentRequest.email();
         String reason = "Email already exists";
         if (parentRepository.findByEmail(email).isPresent()) {
             throw new ApiRequestResponse(reason);
         }
         else {
+            Student student = studentRepository.findById(parentRequest.studentId()).orElseThrow(() -> new ApiRequestResponse("Student not found"));
+            //create the new entity
+            Parent parent = new Parent();
+            parent.setParentName(parentRequest.parentName());
+            parent.setEmail(parentRequest.email());
+            parent.setPhoneNumber(parentRequest.phoneNumber());
+            parent.setAddress(parentRequest.address());
+            // set the parent to a student
+            student.setParent(parent);
+
+            // save the parent
             parentRepository.save(parent);
-            return ResponseEntity.ok("Successfully added parent");
+            studentRepository.save(student);
+            return ResponseEntity.ok().body("Successfully added parent");
         }
     }
 
