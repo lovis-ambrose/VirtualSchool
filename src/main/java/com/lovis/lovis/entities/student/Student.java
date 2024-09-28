@@ -1,6 +1,5 @@
 package com.lovis.lovis.entities.student;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lovis.lovis.entities.attendance.Attendance;
 import com.lovis.lovis.entities.course.Course;
 import com.lovis.lovis.entities.guardian.Parent;

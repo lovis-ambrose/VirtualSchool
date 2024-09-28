@@ -6,6 +6,7 @@ import com.lovis.lovis.services.user.AuthenticationService;
 import com.lovis.lovis.services.user.dtos.LoginUserDto;
 import com.lovis.lovis.services.user.dtos.RegisterUserDto;
 import com.lovis.lovis.services.user.responses.LoginResponse;
+import com.lovis.lovis.services.user.responses.RegisterResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,14 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("signup")
-    public ResponseEntity<User> signup(@RequestBody RegisterUserDto registerUser) {
-        User registeredUser = authenticationService.signUp(registerUser);
+    public ResponseEntity<RegisterResponse> signup(@RequestBody RegisterUserDto registerUser) {
+        User user = authenticationService.signUp(registerUser);
+        RegisterResponse registeredUser = new RegisterResponse();
+        registeredUser.setId(user.getId());
+        registeredUser.setFullName(user.getFullName());
+        registeredUser.setEmail(user.getEmail());
+        registeredUser.setCreatedAt(user.getCreatedAt());
+        registeredUser.setUpdatedAt(user.getUpdatedAt());
         return ResponseEntity.ok(registeredUser);
     }
 

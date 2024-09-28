@@ -2,6 +2,7 @@ package com.lovis.lovis.services.user;
 
 import com.lovis.lovis.entities.user.User;
 import com.lovis.lovis.exceptions.response.ApiRequestResponse;
+import com.lovis.lovis.exceptions.response.EmailAlreadyExistsResponse;
 import com.lovis.lovis.repositories.users.UserRepository;
 import com.lovis.lovis.services.user.dtos.LoginUserDto;
 import com.lovis.lovis.services.user.dtos.RegisterUserDto;
@@ -23,7 +24,7 @@ public class AuthenticationService {
     public User signUp(RegisterUserDto register) {
         Optional<User> userExists = userRepository.findByEmail(register.getEmail());
         if (userExists.isPresent()) {
-            throw new ApiRequestResponse("User already exists");
+            throw new EmailAlreadyExistsResponse("User already exists");
         }
        User user = new User();
        user.setFullName(register.getFullName());
