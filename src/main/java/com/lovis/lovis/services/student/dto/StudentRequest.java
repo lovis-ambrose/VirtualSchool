@@ -33,7 +33,7 @@ public record StudentRequest(
                 student.getLastName(),
                 student.getEmail(),
                 student.getDateOfBirth(),
-                student.getGender(),
+                student.getGender().toString(),
                 student.getAddress(),
                 student.getPhoneNumber()
         );

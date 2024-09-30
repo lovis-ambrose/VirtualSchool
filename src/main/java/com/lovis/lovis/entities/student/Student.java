@@ -3,7 +3,9 @@ package com.lovis.lovis.entities.student;
 import com.lovis.lovis.entities.attendance.Attendance;
 import com.lovis.lovis.entities.course.Course;
 import com.lovis.lovis.entities.guardian.Parent;
+import com.lovis.lovis.enums.Gender;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,16 +26,30 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int studentId;
     @Column(unique = true, nullable = false)
+    @NotNull(message = "student number is required")
+    @Positive(message = "student number must be positive")
     private int studentNumber;
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "registration number is required.")
     private String registrationNumber;
+    @NotBlank(message = "first name is required.")
     private String firstName;
+    @NotBlank(message = "first name is required.")
     private String lastName;
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "email is required.")
+    @Email(message = "invalid email address")
     private String email;
+    @NotNull(message = "The date of birth is required.")
+    @Past(message = "The date of birth must be in the past.")
     private Date dateOfBirth;
-    private String gender;
+    @NotNull(message = "The gender is required.")
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    @NotBlank(message = "address is required")
     private String address;
+    // internationalize
+    @Pattern(regexp = "^\\+(?:[0-9] ?){6,14}[0-9]$", flags = Pattern.Flag.CASE_INSENSITIVE, message = "invalid phone number.")
     private String phoneNumber;
     @CreationTimestamp
     private Date dateOfEnrollment;

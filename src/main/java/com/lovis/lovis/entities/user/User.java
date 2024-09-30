@@ -1,6 +1,7 @@
 package com.lovis.lovis.entities.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,12 +24,17 @@ public class User implements UserDetails {
     private int id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Your full name is required")
+    @Size(min = 2, max = 100, message = "The length of full name must be between 2 and 100 characters.")
     private String fullName;
 
     @Column(unique = true, length = 100, nullable = false)
+    @NotEmpty(message = "email is required")
+    @Email(message = "Invalid email address", flags = {Pattern.Flag.CASE_INSENSITIVE})
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "password is required")
     private String password;
 
     @CreationTimestamp

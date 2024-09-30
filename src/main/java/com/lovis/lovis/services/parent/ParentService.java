@@ -48,14 +48,17 @@ public class ParentService {
             //create the new entity
             Parent parent = new Parent();
             parent.setParentName(parentRequest.parentName());
+            parent.setGender(parentRequest.gender());
             parent.setEmail(parentRequest.email());
             parent.setPhoneNumber(parentRequest.phoneNumber());
             parent.setAddress(parentRequest.address());
-            // set the parent to a student
+            // Save the parent first
+            parentRepository.save(parent);
+
+            /// Set the saved parent to the student
             student.setParent(parent);
 
-            // save the parent
-            parentRepository.save(parent);
+            // Save the student
             studentRepository.save(student);
             return ResponseEntity.ok().body("Successfully added parent");
         }
